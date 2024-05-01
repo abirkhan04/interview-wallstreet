@@ -25,31 +25,38 @@ public class SaleServiceImpl implements SaleService {
 		}
 		return totalSaleAmount;
 	}
-    
-    
-    private List<LocalDate> getDatesInRange(LocalDate startDate, LocalDate endDate) {
-        List<LocalDate> datesInRange = new ArrayList<LocalDate>();
-        LocalDate date = startDate;
-        while (!date.isAfter(endDate)) {
-            datesInRange.add(date);
-            date = date.plusDays(1);
-        }
-        return datesInRange;
-    }
-    
-    @Override
+
+	private List<LocalDate> getDatesInRange(LocalDate startDate, LocalDate endDate) {
+		List<LocalDate> datesInRange = new ArrayList<LocalDate>();
+		LocalDate date = startDate;
+		while (!date.isAfter(endDate)) {
+			datesInRange.add(date);
+			date = date.plusDays(1);
+		}
+		return datesInRange;
+	}
+
+	@Override
 	public LocalDate getMaxSaleDay(LocalDate startDate, LocalDate endDate) {
-    	List<LocalDate> datesInRange = getDatesInRange(startDate, endDate);
-    	double maxSales = Double.MIN_VALUE;
-    	LocalDate localDate = LocalDate.parse("1979-01-01");
-    	for(LocalDate date : datesInRange) {
-    		double totalSales = getTotalSaleForTheDate(date);
-    		if(totalSales > maxSales) {
-    			maxSales = totalSales;
-    			localDate = date;
-    		}
-    	}
-    	return localDate;
-    }
+		List<LocalDate> datesInRange = getDatesInRange(startDate, endDate);
+		double maxSales = Double.MIN_VALUE;
+		LocalDate localDate = LocalDate.parse("1979-01-01");
+		for (LocalDate date : datesInRange) {
+			double totalSales = getTotalSaleForTheDate(date);
+			if (totalSales > maxSales) {
+				maxSales = totalSales;
+				localDate = date;
+			}
+		}
+		return localDate;
+	}
+
+	public List<String> getTop5SellingItems() {
+		return saleRepository.findTop5SellingItems();
+	}
+
+	public List<String> getTop5SellingItemsInDateRange(LocalDate startDate, LocalDate endDate) {
+		return saleRepository.findTop5SellingItemsOfDateRange(startDate, endDate);
+	}
 
 }
